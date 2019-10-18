@@ -29,14 +29,16 @@ from .views import (ViewBoards,
                     ViewCard,
                     Attatchments,
                     DeleteAttatchment,
-                    AddCheckList,)
+                    AddCheckList,
+                    DeleteCheckList,
+                    HomeRedirect,)
 
 urlpatterns = [
     path('', ViewBoards.as_view(), name="viewBoards"),
     path('board/new/', AddBoard.as_view(), name="addBoard"),
     path('board/<int:board_id>/edit/', EditBoard.as_view(), name="editBoard"),
     path('board/<int:board_id>/delete/', DeleteBoard.as_view(), name="deleteBoard"),
-    path('board/<int:board_id>/<int:member_id>', BoardContent.as_view(), name="boardContent"),
+    path('board/<int:board_id>/', BoardContent.as_view(), name="boardContent"),
     path('board/<int:board_id>/list/new/', AddList.as_view(), name="addList"),
     path('board/<int:board_id>/<int:list_id>/edit/', EditList.as_view(), name="editList"),
     path('board/<int:board_id>/<int:list_id>/delete/', DeleteList.as_view(), name="deleteList"),
@@ -53,6 +55,8 @@ urlpatterns = [
     path('board/<int:board_id>/invite/', InviteMember.as_view(), name="inviteMember"),
     path('board/<int:board_id>/invite/ajax/', InviteMember.as_view(), name="inviteMemberAjax"),
     path('board/<int:board_id>/<uuid:invitation_id>/invite/', LinkInviteMember.as_view(), name="linkInviteMembers"),
+    path('board/home/', HomeRedirect.as_view(), name="homeRedirect"),
+    
 
 
     path('accounts/signup/', SignUp.as_view(), name='signUp'),
@@ -67,6 +71,7 @@ urlpatterns = [
     path('board/<int:board_id>/<int:list_id>/<int:card_id>/edit/change/', ChangeCard.as_view(), name="changeCard"),
 
     path('board/<int:board_id>/<int:list_id>/<int:card_id>/checklist/add/', AddCheckList.as_view(), name="addChecklist"),
+    path('board/<int:board_id>/<int:list_id>/<int:card_id>/<int:cl_id>/cl/delete/', DeleteCheckList.as_view(), name="deleteChecklist"),
     
     
 ]

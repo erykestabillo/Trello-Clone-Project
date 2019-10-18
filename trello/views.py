@@ -16,12 +16,14 @@ from django.contrib.auth.models import Group, Permission
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.db.models import Q
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 # Create your views here.
 class CustomPermissionMixin(object):
     def dispatch(self, request, **kwargs):
-        member = BoardMembers.objects.filter(board_id=kwargs.get('board_id'),member_id=request.user)
+        member = BoardMembers.objects.filter(board_id=kwargs.get('board_id'))
         if member.exists():
             return super().dispatch(request, **kwargs)
         raise Http404('You do not have permission.')
@@ -119,6 +121,7 @@ class AddListAjax(TemplateView):
             board_form = form.save(commit=False)
             board_form.board = board
             board_form.save()
+            Activity.objects.create(content_object=board_form,board=board, activity_type=Activity.ADD_LIST, user=request.user)
             return JsonResponse({'board_form':board_form.title})
         return JsonResponse({}, status=400)
 
@@ -193,7 +196,7 @@ class ChangeCard(TemplateView):
         card.board_list = board_list
         card.save()
         Activity.objects.create(content_object=card,board=board, activity_type=Activity.MOVED_CARD, user=request.user)
-        return JsonResponse({}, status=200)
+        return JsonResponse({'list':card.board_list.id}, status=200)
 
 
 class Attatchments(TemplateView):
@@ -217,7 +220,7 @@ class DeleteAttatchment(TemplateView):
         board = get_object_or_404(Board,id=kwargs.get("board_id"))
         attchmnt = get_object_or_404(CardAttatchments,id=kwargs.get('attchment_id'))
         attchmnt.delete()
-        return redirect('boardContent', board_id=board.id, member_id=request.user.id)
+        return redirect('boardContent', board_id=board.id)
 
 
 class ViewCard(TemplateView):
@@ -232,6 +235,7 @@ class ViewCard(TemplateView):
         board = get_object_or_404(Board,id=kwargs.get("board_id"))
         attatchments = CardAttatchments.objects.filter(card=card)
         checklists = CardCheckList.objects.filter(card=card)
+        
         return render(request, self.template_name,{'form':form,'formCl':formCl,'checklists':checklists,'attatchments':attatchments,'board':board,'list':board_list,'card':card})
     
 
@@ -266,7 +270,7 @@ class DeleteCard(TemplateView):
         card = get_object_or_404(ListCard,id=kwargs.get("card_id"))
         board = get_object_or_404(Board,id=kwargs.get("board_id"))
         card.delete()
-        return redirect('boardContent', board_id=board.id, member_id=request.user.id)
+        return redirect('boardContent', board_id=board.id)
 
 
 class ArchiveCard(TemplateView):
@@ -276,7 +280,7 @@ class ArchiveCard(TemplateView):
         card.is_archived = True
         card.save()
         Activity.objects.create(content_object=card,board=board, activity_type=Activity.ARCHIVE_CARD, user=request.user)
-        return redirect('boardContent', board_id=board.id, member_id=request.user.id)
+        return redirect('boardContent', board_id=board.id)
 
 class CardArchives(TemplateView):
     template_name = "trello/archived_cards.html"
@@ -293,7 +297,7 @@ class RestoreCard(TemplateView):
         card.is_archived = False
         card.save()
         Activity.objects.create(content_object=card,board=board, activity_type=Activity.RESTORE_CARD, user=request.user)
-        return redirect('boardContent', board_id=board.id, member_id=request.user.id)
+        return redirect('boardContent', board_id=board.id)
     
 
 class DeleteList(TemplateView):
@@ -302,7 +306,7 @@ class DeleteList(TemplateView):
         board = get_object_or_404(Board,id=kwargs.get("board_id"))
         board_list.delete()
         
-        return redirect('boardContent', board_id=board.id, member_id=request.user.id)
+        return redirect('boardContent', board_id=board.id)
 
 
 
@@ -368,9 +372,6 @@ class InviteMember(TemplateView):
 class LinkInviteMember(LoginRequiredMixin ,TemplateView):
     login_url = '/accounts/login/'
     template_name = "trello/invitation_accept.html"
-    def get(self,request,**kwargs):
-        return render(request, self.template_name)
-    
     def post(self,request,**kwargs):
         board = get_object_or_404(Board,id=kwargs.get("board_id"))
         board_member, created = BoardMembers.objects.get_or_create(member=request.user,board=board)
@@ -380,7 +381,13 @@ class LinkInviteMember(LoginRequiredMixin ,TemplateView):
             template_name ="trello/already_a_member.html"
             return render(request,template_name,{'board_member':board_member})
             
-        return redirect('boardContent', board_id=board.id, member_id=request.user.id)
+        return redirect('boardContent', board_id=board.id)
+
+class HomeRedirect(LoginRequiredMixin,TemplateView):
+    login_url = '/accounts/login/'
+    template_name = "trello/already_a_member.html"
+    def post(self,request,**kwargs):
+        return redirect('viewBoards')
       
         
 class AddCheckList(TemplateView):
@@ -394,9 +401,18 @@ class AddCheckList(TemplateView):
             cl_data = formCl.save(commit=False)
             cl_data.card = card
             cl_data.save()
-            
             return JsonResponse({})
-        return JsonResponse({}, status=400)
+        return JsonResponse({}, status=400) 
+
+class DeleteCheckList(View):
+    
+    def get(self,request,**kwargs):
+        board_list = get_object_or_404(BoardList,id=kwargs.get("list_id"))
+        board = get_object_or_404(Board,id=kwargs.get("board_id"))
+        card = get_object_or_404(ListCard,id=kwargs.get("card_id"))
+        cl = get_object_or_404(CardCheckList,id=kwargs.get("cl_id"))
+        cl.delete()
+        return redirect('boardContent', board_id=board.id)
 
 
         

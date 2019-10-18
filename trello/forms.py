@@ -33,12 +33,12 @@ class CardAttatchmentForm(ModelForm):
         model = CardAttatchments
         fields = ['file']
 
+
 class CardCheckListForm(ModelForm):
     
     class Meta:
         model = CardCheckList
         fields = ['checklist']
-
 
 
 class UserCreationForm(ModelForm):

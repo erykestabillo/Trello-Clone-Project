@@ -37,7 +37,7 @@
                     <div class="modal-dialog modal-dialog-centered" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+                          <h5 class="modal-title" id="exampleModalCenterTitle">Add New Board</h5>
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                           </button>
@@ -63,12 +63,12 @@
         </nav>
   
         <div class="container">
-            <div class="row">
+            <div class="row justify-content-start mt-5">
                 <div class="col-sm-4">
 
                     <ul class="list-group "> <h1>Boards</h1>
                         {% for board in boards %}
-                        <li class="list-group-item"><a href="{% url 'boardContent' board_id=board.id member_id=user.id%}">{{ board }}</a></li>
+                        <a href="{% url 'boardContent' board_id=board.id%}" style="color: black"><li class="list-group-item">{{ board }}</li></a>
                         {% endfor %}
                         <!-- <a class="list-group-item" href="{% url 'addBoard' %}">Add Board</a> -->
                     </ul>
@@ -77,7 +77,7 @@
           
                         {% for board_member in member_boards %}             
                  
-                              <li class="list-group-item"><a href="{% url 'boardContent' board_id=board_member.board_id member_id=board_member.member_id%}">{{ board_member.board }}</a></li>                     
+                        <a href="{% url 'boardContent' board_id=board_member.board_id%}" style="color: black"><li class="list-group-item">{{ board_member.board }}</li></a>              
                    
                         {% endfor %}
                

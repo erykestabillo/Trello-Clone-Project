@@ -9,7 +9,7 @@
             
 
                 <div class="progress">
-                    <div id="progress-bar" class="progress-bar" role="progressbar"  aria-valuenow="" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div id="progress-bar" class="progress-bar" role="progressbar"  aria-valuemin="0" aria-valuemax="100"></div>
                   </div>
                   
                 <h2 style="display:inline-block">Checklist</h2>
@@ -20,7 +20,7 @@
                     <ul id="checklist" class="list-group">
                         {% for checklist in checklists %}
                             <li class="list-group-item">
-                                <input type="checkbox"> {{ checklist.checklist }}
+                                <input type="checkbox"> {{ checklist.checklist }}<a href="{% url 'deleteChecklist' board_id=board.id list_id=list.id card_id=card.id cl_id=checklist.id%}" style="color:red" class="fas fa-times float-right" ></a>
                             </li>
                         {% endfor %}
                     </ul><br>
@@ -39,7 +39,7 @@
 
                 {% for attatchment in attatchments %}
                 
-                {% if 'jpg' in  attatchment.file.url or 'png' in attatchment.file.url %}
+                {% if 'jpg' in  attatchment.file.url or 'png' in attatchment.file.url or 'JPG' in attatchment.file.url %}
                 {{ attatchment.file }}<a style="color:black" class="fas fa-trash-alt float-right mt-1" href="{% url 'deleteAttatchment' board_id=board.id list_id=list.id card_id=card.id attchment_id=attatchment.id %}"></a>
                     <p><img src="{{ attatchment.file.url }}" height="50" width="50"></p>
                 {% else %}

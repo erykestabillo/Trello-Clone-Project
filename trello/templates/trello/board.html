@@ -18,9 +18,9 @@ Archived Cards
 
 
 <!-- Modal -->
-<div class="modal fade" id="archived-cards-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-<div class="modal-dialog modal-dialog-centered" role="document">
-<div class="modal-content">
+<div class="modal fade " id="archived-cards-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+<div class="modal-content ">
     <div class="modal-header">
     <h5 class="modal-title" id="exampleModalCenterTitle">Archived Cards</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -41,23 +41,16 @@ Archived Cards
         <button class="btn btn-secondary dropdown-toggle float-right mr-4 " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Activity Log
         </button>
-        <div class="dropdown-menu" style="max-height: 300px;" aria-labelledby="dropdownMenuButton">
-                {% for activity in activities %}
-     
+        <div class="dropdown-menu overflow-auto" style="max-height: 300px;" aria-labelledby="dropdownMenuButton">
+            {% for activity in activities %}
                 <li class="list-group-item">{{activity.user}} {{ activity.activity_type }} {{ activity.content_object }} <br>{{ activity.date|timesince }} ago</li>
-                
-        {% endfor %}
+            {% endfor %}
 
         </div>
 </div>
 
-        
 
 <div class="container">
-    
-    <!-- <p><a class="far fa-plus-square" href="{% url 'addList' board_id=board.id %}">   Add List</a></p> -->
-    
-
     <!-- Button trigger modal add list -->
     <br><br>
     <button type="button"
@@ -100,7 +93,7 @@ Archived Cards
           <div class="col-sm-4">
                   <br>
 
-                  <li class=" ui-state-default ui-state-disabled list-group-item list-group-item-dark font-weight-bold ">{{ list }} 
+                  <li class="ui-state-default ui-state-disabled list-group-item list-group-item-dark font-weight-bold ">{{ list }} 
                         <!--  <a class="far fa-edit" href="{% url 'editList' board_id=board.id list_id=list.id %}"></a> -->
   
                           <a style="color:darkblue" class="fas fa-trash-alt float-right mt-1" href="{% url 'deleteList' board_id=board.id list_id=list.id %}"></a>
@@ -138,11 +131,11 @@ Archived Cards
   
   
                       </li>
-                  <ul id="sortable" data-id="{{list.id}}" class="list-group sort"> 
+                  <ul id="sortable" data-id="{{list.id}}" class="list-group sort pt-1" > 
 
                       {% for card in list_cards %}
                           {% if card.board_list.id == list.id %}{% csrf_token %}
-                              <li id="card-{{ card.id }}"  class=" list-group-item sort-item">
+                              <li id="card-{{ card.id }}"  class=" list-group-item sort-item" >
                                 <!-- Button trigger modal view card-->
                                 <a 
                                 style="color: black; width: 70%" 
@@ -174,7 +167,7 @@ Archived Cards
 
                             <!-- Modal view card-->
                             <div class="modal fade" id="view-card-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="exampleModalCenterTitle">Card</h5>
@@ -200,15 +193,15 @@ Archived Cards
 
                   </ul>
                   <li class="list-group-item" style="background-color: darkblue">
-                        <button type="button"
-                        style="background-color: darkblue" 
+                        <a 
+                        style="background-color: darkblue; color:white;" 
                         class="btn btn-primary border-0 bg bg-transparent btn-block"
                         id="add-card" 
                         data-toggle="modal" 
                         data-remote="{% url 'addCard' board_id=board.id list_id=list.id %}"
                         data-target="#card-add-modal">
                         Add Card
-                        </button>
+                  </a>
     
                         <!-- Modal add card-->
                         <div class="modal fade" id="card-add-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
