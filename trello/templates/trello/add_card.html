@@ -1,0 +1,33 @@
+{% load crispy_forms_tags %}
+<html>
+    <head>
+        <title>Trello Project</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+
+    <body>
+            <div class="container">
+                    <div class="row justify-content-center">
+                           
+                            <div class="col-sm5">
+                                
+                                <form enctype="multipart/form-data" id="add_card_form" action="{% url 'addCardAjax' board_id=board_id list_id=list_id %}" method="POST" novalidate> {% csrf_token %}
+                    
+                                  
+                                    <ul id="frms">
+                                              Title: {{ form.title }} 
+                                    </ul>
+                                    <p class="error-add-card"></p>
+                    
+                                  
+                                    <br><button type="submit" style="background-color: darkblue" class="btn btn-success">Save</button>
+                                </form>
+                            </div>
+                    </div>
+            </div>
+
+            
+    </body>
+</html>

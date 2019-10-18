@@ -1,0 +1,48 @@
+
+
+
+
+
+
+
+<html>
+    <head>
+        <title>Trello Project</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+        <script
+          src="https://code.jquery.com/jquery-3.4.1.min.js"
+          integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+          crossorigin="anonymous">
+          </script>
+
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script>
+        $( function() {
+          $( "#sortable" ).sortable();
+          $( "#sortable" ).disableSelection();
+        } );
+        </script>
+
+    </head>
+
+    <body>
+            <div class="container">
+                    <div class="row justify-content-center">
+                           
+                            <div class="col-sm5">
+                                
+                                <ul class="list-group" id="sortable">
+                                  <li class="list-group-item">hello</li>
+                                  <li class="list-group-item">again</li>
+                                  <li class="list-group-item">sss</li>
+                                </ul>
+                            </div>
+                    </div>
+            </div>
+            
+    </body>
+</html>

@@ -1,0 +1,10 @@
+{% autoescape off %}
+You are invited in a trello board({{ board.title }}) by {{ user }},
+
+To accept, click the link:
+{{ domain }}{% url 'linkInviteMembers' board_id=board.id invitation_id=uuid %}
+
+If clicking the link above doesn't work, please copy and paste the URL in a new browser
+window instead.
+
+{% endautoescape %}

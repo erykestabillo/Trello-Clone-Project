@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+{% load crispy_forms_tags %}
+<html>
+    <head>
+            <title>Trello Project</title>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1"> 
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+
+    <body>
+            <div class="container">
+                    <div class="row justify-content-center">
+                           
+                            <div class="col-sm3">
+                                <br><br><br>
+                                
+                                <h2 class="mt-2">Sign up</h2>
+                                <form method="post">
+                                {% csrf_token %}
+                                {{ form|crispy }}
+                                <br>
+                                <button type="submit" class="btn btn-success">Confirm</button>
+                                </form>
+                            </div>
+                    </div>
+            </div>
+            
+    </body>
+
+</html>
+
+

@@ -1,0 +1,54 @@
+
+        <div class="container">
+            <div class="row justify-content">
+                           
+            <div class="col-sm5">
+                <h2>Description:</h2>
+                <p>{{ card.description }}</p><br>
+
+            
+
+                <div class="progress">
+                    <div id="progress-bar" class="progress-bar" role="progressbar"  aria-valuenow="" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  
+                <h2 style="display:inline-block">Checklist</h2>
+                <form class="attchment_form"  id="add_cl_form" action="{% url 'addChecklist' board_id=board.id list_id=list.id card_id=card.id %}" method="POST" novalidate enctype="multipart/form-data" novalidate> {% csrf_token %}
+                    {{ formCl }}<button type="submit" style="background-color: green" class="btn btn-success btn-sm ">Add</button>
+                    <br><p class="error-add-cl"></p>
+
+                    <ul id="checklist" class="list-group">
+                        {% for checklist in checklists %}
+                            <li class="list-group-item">
+                                <input type="checkbox"> {{ checklist.checklist }}
+                            </li>
+                        {% endfor %}
+                    </ul><br>
+                </form>
+                
+                
+
+
+                <h2>Attatchments: </h2>
+                <form class="attchment_form"  id="card_attatchment_form" action="{% url 'cardAttatchment' board_id=board.id list_id=list.id card_id=card.id %}" method="POST" novalidate enctype="multipart/form-data" novalidate> {% csrf_token %}
+                        {{ form }}<p class="error-add-attchment"></p>
+                        <br><button type="submit" style="background-color: green" class="btn btn-success btn-sm ">Submit</button>                        
+                </form>
+                
+                <br>
+
+                {% for attatchment in attatchments %}
+                
+                {% if 'jpg' in  attatchment.file.url or 'png' in attatchment.file.url %}
+                {{ attatchment.file }}<a style="color:black" class="fas fa-trash-alt float-right mt-1" href="{% url 'deleteAttatchment' board_id=board.id list_id=list.id card_id=card.id attchment_id=attatchment.id %}"></a>
+                    <p><img src="{{ attatchment.file.url }}" height="50" width="50"></p>
+                {% else %}
+                {{ attatchment.file }}<a style="color:black" class="fas fa-trash-alt float-right mt-1" href="{% url 'deleteAttatchment' board_id=board.id list_id=list.id card_id=card.id attchment_id=attatchment.id %}"></a>
+                <p><img src="{{ MEDIA_URL }}files/file.png" height="50" width="50"></p>
+                {% endif %}
+                {% endfor %}
+                                
+            </div>
+            </div>
+        </div>
+            

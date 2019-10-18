@@ -1,0 +1,31 @@
+[33m86b1550[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m HEAD@{0}: reset: moving to HEAD~1
+[33m74fa7dc[m HEAD@{1}: reset: moving to HEAD
+[33m74fa7dc[m HEAD@{2}: reset: moving to HEAD
+[33m74fa7dc[m HEAD@{3}: reset: moving to HEAD
+[33m74fa7dc[m HEAD@{4}: reset: moving to HEAD
+[33m74fa7dc[m HEAD@{5}: reset: moving to HEAD
+[33m74fa7dc[m HEAD@{6}: reset: moving to HEAD
+[33m74fa7dc[m HEAD@{7}: reset: moving to HEAD
+[33m74fa7dc[m HEAD@{8}: reset: moving to HEAD
+[33m74fa7dc[m HEAD@{9}: reset: moving to 74fa7dce0aef8b92d799cd41eec06f5b171b4247
+[33m74fa7dc[m HEAD@{10}: reset: moving to HEAD
+[33m74fa7dc[m HEAD@{11}: commit: checklist with progress meter
+[33m86b1550[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m HEAD@{12}: reset: moving to HEAD^
+[33m2f78390[m HEAD@{13}: reset: moving to HEAD^
+[33m15e50cc[m HEAD@{14}: reset: moving to HEAD^
+[33m2b44040[m[33m ([m[1;31morigin/master[m[33m)[m HEAD@{15}: reset: moving to HEAD^
+[33mcb79f8f[m HEAD@{16}: reset: moving to HEAD
+[33mcb79f8f[m HEAD@{17}: reset: moving to HEAD^
+[33m0abb7ca[m HEAD@{18}: reset: moving to HEAD
+[33m0abb7ca[m HEAD@{19}: reset: moving to HEAD
+[33m0abb7ca[m HEAD@{20}: commit: added checklist with progress bar; fix img src display
+[33mcb79f8f[m HEAD@{21}: commit: added checklist with progress bar; fixed img src display
+[33m2b44040[m[33m ([m[1;31morigin/master[m[33m)[m HEAD@{22}: commit: added card view description and attatchments
+[33m15e50cc[m HEAD@{23}: commit: invite board members with board permissions
+[33m2f78390[m HEAD@{24}: commit: send email to invited users
+[33m86b1550[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m HEAD@{25}: commit: added activty log
+[33m60b13b7[m HEAD@{26}: commit: added card archives and drag and drop function
+[33m33ce82d[m HEAD@{27}: commit: added ajax modals
+[33m31d138c[m HEAD@{28}: commit: added demo modal
+[33mdc418c4[m HEAD@{29}: commit: sign in sign up forgot password
+[33m8cd4681[m HEAD@{30}: commit (initial): trello app create board,list,card
