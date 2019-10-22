@@ -7,7 +7,7 @@ $(document).ready(function () {
             method: 'GET',
             url: remoteUrl
        }).done(function(response){
-        modal.find('.modal-body').html(response)
+        modal.find('.modal-body').html(response)      
        })
       })
 
@@ -279,20 +279,18 @@ $(document).ready(function () {
 
 
    $('#view-card-modal').on('show.bs.modal', function(event){
-      
       var remoteUrl = $(event.relatedTarget).data('remote');
       var modal = $(this);
-      $('#progress').hide();
-      console.log(modal)
+      
       $.ajax({
          method: 'GET',
          url: remoteUrl
 
       }).done(function(response){
-         
          modal.find('.modal-body').html(response)
       })
    })
+
 
    $(document).on('submit','#card_attatchment_form', function(event){
       var action = $('#card_attatchment_form').attr('action');
@@ -317,11 +315,11 @@ $(document).ready(function () {
       })
    })
 
+
 $(document).on('submit','#add_cl_form', function(event){    
       var action = $('#add_cl_form').attr('action');
       var add_card_data = $('#add_cl_form').serialize();
-      var csrf = $('input[name="csrfmiddlewaretoken"]').val();
-      
+      var csrf = $('input[name="csrfmiddlewaretoken"]').val();      
       event.preventDefault()
       $.ajax({
          method: 'POST',
@@ -339,13 +337,35 @@ $(document).on('submit','#add_cl_form', function(event){
    })
 
 
+   $(document).on('submit','#add_comm_form', function(event){    
+      var action = $('#add_comm_form').attr('action');
+      var add_comm_data = $('#add_comm_form').serialize();
+      var csrf = $('input[name="csrfmiddlewaretoken"]').val();      
+      console.log(add_comm_data)
+      event.preventDefault()
+      $.ajax({
+         method: 'POST',
+         url: action,
+         data: add_comm_data,
+         headers:{
+            'X-CSRFToken':csrf
+        }
+      }).done(function(response){
+         window.location.href = '';  
+      }).fail(function(response){
+         var error_template = '<ul><li>This Field is required</li></ul>';
+         $('.error-add-cl').html(error_template)
+      })
+   })
+
+
    $(".sort").sortable({
       connectWith: ".sort",
       
       receive: function(event,ui){
-         var card_list_id = $(this).data('id')
-         var csrf = $('[name="csrfmiddlewaretoken"]').val()         
-         var action = $(event.toElement).data('action')
+         var card_list_id = $(this).data('id');
+         var csrf = $('[name="csrfmiddlewaretoken"]').val();    
+         var action = $(event.toElement).data('action');
          console.log(action)
 
          $.ajax({
@@ -361,14 +381,31 @@ $(document).on('submit','#add_cl_form', function(event){
       }
    })
 
-   $(document).on('click','input', function() {
+
+   $(document).on('click','.cl', function(event,ui) {
       
       var total = $('input[type="checkbox"]').length;
       var checked = $('input[type="checkbox"]:checked').length;
-      var percentage = (checked/total)*100
-      
-      $('#progress-bar').css('width', percentage + '%').attr('aria-valuenow', percentage);
+      var percentage = (checked/total)*100;   
+      var cl_id = $(event.toElement).data('id');
+      var action = $(event.toElement).data('action');
+      var csrf = $('[name="csrfmiddlewaretoken"]').val();
+
+      $.ajax({
+         method: 'POST',
+         url: action,
+         data: {'id':cl_id},
+         headers:{
+            'X-CSRFToken':csrf
+        }
+      }).done(function(response){
+         $('#progress-bar').css('width', percentage + '%').attr('aria-valuenow', percentage);
+      })     
   });
+
+  
+
+
 
 
 
@@ -376,3 +413,4 @@ $(document).on('submit','#add_cl_form', function(event){
 
 
 });
+

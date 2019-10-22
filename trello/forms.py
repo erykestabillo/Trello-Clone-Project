@@ -1,6 +1,6 @@
 from django.forms import ModelForm,CharField
 from django import forms
-from .models import Board,BoardList, ListCard,BoardInvite,CardAttatchments,CardCheckList
+from .models import Board,BoardList, ListCard,BoardInvite,CardAttatchments,CardCheckList,CommentSection
 from .models import TrelloUser
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
@@ -34,11 +34,16 @@ class CardAttatchmentForm(ModelForm):
         fields = ['file']
 
 
-class CardCheckListForm(ModelForm):
-    
+class CardCheckListForm(ModelForm):    
     class Meta:
         model = CardCheckList
         fields = ['checklist']
+
+
+class CommentSectionForm(ModelForm):    
+    class Meta:
+        model = CommentSection
+        fields = ['text']
 
 
 class UserCreationForm(ModelForm):

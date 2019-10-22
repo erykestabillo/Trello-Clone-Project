@@ -81,6 +81,7 @@ class Board(models.Model):
     title = models.CharField(max_length=50)
     date_created = models.DateTimeField(default=timezone.now)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    is_archived = models.BooleanField(default=False)
 
     def publish(self):
         self.date_created = timezone.now()
@@ -98,13 +99,23 @@ class Activity(models.Model):
     ARCHIVE_CARD ='archived card'
     MOVED_CARD ='moved card'
     RESTORE_CARD ='restored card'
+    CARD_ATTATCHMENT_ADD = 'attached file on card'
+    CARD_ATTATCHMENT_DELETE = 'removed attatchment on card'
+    CL_ADD = 'added checklist on card'
+    CL_DEL = 'removed checklist on card'
+    COMMENT_ADD = 'commented on card'
     ACTIVITY_TYPES = (
         (ADD_LIST, 'Add List'),
         (EDIT_LIST, 'Edit List'),
         (ADD_CARD, 'Add Card'),
         (EDIT_CARD, 'Edit Card'),
         (ARCHIVE_CARD, 'Archive Card'),
-        (MOVED_CARD, 'Moved Card')
+        (MOVED_CARD, 'Moved Card'),
+        (CARD_ATTATCHMENT_ADD, 'Add Attatchment'),
+        (CARD_ATTATCHMENT_DELETE, 'Remove Attatchment'),
+        (CL_ADD, 'Add Checklist'),
+        (CL_DEL, 'Delete Checklist'),
+        (COMMENT_ADD, 'Add Comment')
     )
 
     user = models.ForeignKey(TrelloUser, on_delete=models.CASCADE)
@@ -170,3 +181,10 @@ class CardCheckList(models.Model):
     card = models.ForeignKey(ListCard,on_delete=models.CASCADE)
     checklist = models.CharField(max_length=100, null =True)
     is_checked = models.BooleanField(default=False)
+
+class CommentSection(models.Model):
+    card = models.ForeignKey(ListCard,on_delete=models.CASCADE)
+    author =  models.ForeignKey(TrelloUser, on_delete=models.CASCADE)
+    text = models.CharField(max_length=200)
+    date_created = models.DateTimeField(default=timezone.now)
+

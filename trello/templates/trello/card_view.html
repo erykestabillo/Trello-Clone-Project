@@ -13,15 +13,31 @@
                   </div>
                   
                 <h2 style="display:inline-block">Checklist</h2>
-                <form class="attchment_form"  id="add_cl_form" action="{% url 'addChecklist' board_id=board.id list_id=list.id card_id=card.id %}" method="POST" novalidate enctype="multipart/form-data" novalidate> {% csrf_token %}
+                <form id="add_cl_form" action="{% url 'addChecklist' board_id=board.id list_id=list.id card_id=card.id %}" method="POST" novalidate enctype="multipart/form-data" novalidate> {% csrf_token %}
                     {{ formCl }}<button type="submit" style="background-color: green" class="btn btn-success btn-sm ">Add</button>
-                    <br><p class="error-add-cl"></p>
+                <br><p class="error-add-cl"></p>
 
-                    <ul id="checklist" class="list-group">
+                    <ul id="checklist" class="list-group cl"  >
                         {% for checklist in checklists %}
-                            <li class="list-group-item">
-                                <input type="checkbox"> {{ checklist.checklist }}<a href="{% url 'deleteChecklist' board_id=board.id list_id=list.id card_id=card.id cl_id=checklist.id%}" style="color:red" class="fas fa-times float-right" ></a>
+                        {% if checklist.is_checked %}
+                            <li class="list-group-item cl">
+                                <input id="checked" type="checkbox" checked data-id="{{checklist.id}}" data-action="{% url 'checklistCheck' cl_id=checklist.id %}"> {{ checklist.checklist }}<a href="{% url 'deleteChecklist' board_id=board.id list_id=list.id card_id=card.id cl_id=checklist.id%}" style="color:red" class="fas fa-times float-right" ></a>
                             </li>
+                            
+                        {% else %}
+                       
+                            <li class="list-group-item">
+                                <input id="notchecked"type="checkbox" data-id="{{checklist.id}}" data-action="{% url 'checklistCheck' cl_id=checklist.id %}"> {{ checklist.checklist }}<a href="{% url 'deleteChecklist' board_id=board.id list_id=list.id card_id=card.id cl_id=checklist.id%}" style="color:red" class="fas fa-times float-right" ></a>
+                            </li>
+                            
+                        {% endif %}
+
+                        <script>
+                                var total = $('input[type="checkbox"]').length;
+                                var checked = $('input[type="checkbox"]:checked').length;
+                                var percentage = (checked/total)*100
+                                $('#progress-bar').css('width', percentage + '%').attr('aria-valuenow', percentage);
+                        </script>
                         {% endfor %}
                     </ul><br>
                 </form>
@@ -47,6 +63,22 @@
                 <p><img src="{{ MEDIA_URL }}files/file.png" height="50" width="50"></p>
                 {% endif %}
                 {% endfor %}
+
+
+
+
+                {% for comment in comments %}
+                    <div class="comment">
+                        
+                        <li class="list-group-item list-group-item-dark"><strong>{{ comment.author }}  </strong>{{ comment.date_created }}</li>
+                        <li class="list-group-item">{{ comment.text|linebreaks }}</li>
+                    </div>
+                {% empty %}
+                    <p>No comments here yet :(</p>
+                {% endfor %}
+                <form id="add_comm_form" action="{% url 'addComment' board_id=board.id list_id=list.id card_id=card.id %}" method="POST" novalidate enctype="multipart/form-data" novalidate> {% csrf_token %}
+                    Add comment: {{ formComm.text }}<button type="submit" style="background-color: green" class="btn btn-success btn-sm ">Save</button>
+                <br><p class="error-add-comm"></p>
                                 
             </div>
             </div>

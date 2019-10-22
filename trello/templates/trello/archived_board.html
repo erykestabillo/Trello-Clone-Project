@@ -1,0 +1,28 @@
+{% load crispy_forms_tags %}
+<html>
+    <head>
+        <title>Trello Project</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+
+    <body>
+            <br><br><br><br><br><br><br><br><br><br><br><br>
+            <div class="container text-center">
+                    <div class="row justify-content-center" >
+                           
+                            <div class="col-sm5">
+                                
+                                    <h2>Board is closed by the admin</h2>
+                                    {% if board.user == request.user %}
+                                    <a class="btn btn-success" href="{% url 'restoreBoard' board_id=board.id %}">Restore</a>  <a class="btn btn-danger" href="{% url 'deleteBoard' board_id=board.id %}" >Delete</a><br><br>
+                                    {% endif %}
+                                    <a href="{% url 'viewBoards' %}"  class="btn btn-primary">Home</a>
+                                
+                            </div>
+                    </div>
+            </div>
+            
+    </body>
+</html>

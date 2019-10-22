@@ -13,6 +13,8 @@ from .views import (ViewBoards,
                     DeleteCard,
                     DeleteList,
                     DeleteBoard,
+                    BoardArchive,
+                    BoardRestore,
                     SignUp,
                     AddBoardAjax,
                     EditBoardAjax,
@@ -31,13 +33,18 @@ from .views import (ViewBoards,
                     DeleteAttatchment,
                     AddCheckList,
                     DeleteCheckList,
-                    HomeRedirect,)
+                    HomeRedirect,
+                    Search,
+                    ChecklistCheck,
+                    AddComment,)
 
 urlpatterns = [
     path('', ViewBoards.as_view(), name="viewBoards"),
     path('board/new/', AddBoard.as_view(), name="addBoard"),
     path('board/<int:board_id>/edit/', EditBoard.as_view(), name="editBoard"),
     path('board/<int:board_id>/delete/', DeleteBoard.as_view(), name="deleteBoard"),
+    path('board/<int:board_id>/archive/', BoardArchive.as_view(), name="archiveBoard"),
+    path('board/<int:board_id>/restore/', BoardRestore.as_view(), name="restoreBoard"),
     path('board/<int:board_id>/', BoardContent.as_view(), name="boardContent"),
     path('board/<int:board_id>/list/new/', AddList.as_view(), name="addList"),
     path('board/<int:board_id>/<int:list_id>/edit/', EditList.as_view(), name="editList"),
@@ -56,6 +63,7 @@ urlpatterns = [
     path('board/<int:board_id>/invite/ajax/', InviteMember.as_view(), name="inviteMemberAjax"),
     path('board/<int:board_id>/<uuid:invitation_id>/invite/', LinkInviteMember.as_view(), name="linkInviteMembers"),
     path('board/home/', HomeRedirect.as_view(), name="homeRedirect"),
+    path('board/search/', Search.as_view(), name="search"),
     
 
 
@@ -72,6 +80,8 @@ urlpatterns = [
 
     path('board/<int:board_id>/<int:list_id>/<int:card_id>/checklist/add/', AddCheckList.as_view(), name="addChecklist"),
     path('board/<int:board_id>/<int:list_id>/<int:card_id>/<int:cl_id>/cl/delete/', DeleteCheckList.as_view(), name="deleteChecklist"),
+    path('board/<int:cl_id>/cl/check/', ChecklistCheck.as_view(), name="checklistCheck"),
+    path('board/<int:board_id>/<int:list_id>/<int:card_id>/comment/add/', AddComment.as_view(), name="addComment"),
     
     
 ]

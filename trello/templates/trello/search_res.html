@@ -1,0 +1,59 @@
+{% load crispy_forms_tags %}
+<html>
+    <head>
+        <title>Trello Project</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+
+    <body>
+            <div class="container">
+                    <br><br><br><br>
+                    <div class="row justify-content-center">                        
+                            <ul class="list-group">
+                                    <li class="list-group-item list-group-item-dark font-weight-bold">
+                                            Board
+                                    </li>
+    
+                                    {% for res in boardResults %}
+                                    <li class="list-group-item">
+                                        {{ res }}
+                                    </li>
+                                    {% endfor %}
+    
+                            </ul>
+                            
+
+                            <ul class="list-group">
+                                    <li class="list-group-item list-group-item-dark font-weight-bold">
+                                            List
+                                    </li>
+    
+                                    {% for res in listResults %}
+                                    <li class="list-group-item">
+                                        {{ res }}
+                                    </li>
+                                    {% endfor %}
+    
+                            </ul>
+
+                            <ul class="list-group">
+                                    <li class="list-group-item list-group-item-dark font-weight-bold">
+                                            Card
+                                    </li>
+    
+                                    {% for res in cardResults %}
+                                    <li class="list-group-item">
+                                        {{ res }}
+                                    </li>
+                                    {% endfor %}
+    
+                            </ul>
+
+                                
+                    </div>
+            </div>
+            
+    </body>
+</html>

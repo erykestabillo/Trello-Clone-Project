@@ -101,10 +101,16 @@
               
                       </div>
                     </div>
+                </li>            
+                <li class="nav-item">
+                    <form method="GET" action="{% url 'search' %}" novalidate>{% csrf_token %}
+                        <input type="text" name="myinput"><span class="fa fa-search ml-2" style="color:white"> </span>
+                    </form>
                 </li>
+                
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'deleteBoard' board_id=board.id %}">Delete Board</a>
+                    <a class="nav-link" href="{% url 'archiveBoard' board_id=board.id %}">Close Board</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link"  href="{% url 'logout' %}">Logout</a>
