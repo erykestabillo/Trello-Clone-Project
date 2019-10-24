@@ -108,10 +108,11 @@
                     </form>
                 </li>
                 
-
+                {% if board.user == request.user %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'archiveBoard' board_id=board.id %}">Close Board</a>
                 </li>
+                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link"  href="{% url 'logout' %}">Logout</a>
                 </li>

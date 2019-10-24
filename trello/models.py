@@ -128,10 +128,6 @@ class Activity(models.Model):
     content_object = GenericForeignKey()
 
 
-
-
-
-
 class BoardList(models.Model):
     title = models.CharField(max_length=50)
     date_created = models.DateTimeField(default=timezone.now)
@@ -143,12 +139,21 @@ class BoardList(models.Model):
         return self.title
 
 
+class BoardMembers(models.Model):
+    member = models.ForeignKey(TrelloUser, on_delete=models.CASCADE, null=True)
+    board = models.ForeignKey(Board, on_delete=models.CASCADE, null=True)
+    
+    def __str__(self):
+        return str(self.member)
+
+
 class ListCard(models.Model):
     title = models.CharField(max_length=50)
     description = models.TextField(max_length=200, null=True)
     date_created = models.DateTimeField(default=timezone.now)
     board_list = models.ForeignKey(BoardList, on_delete=models.CASCADE, null=True)
     is_archived = models.BooleanField(default=False)
+    card_member = models.ManyToManyField(BoardMembers)
     edit_card = GenericRelation(Activity, related_name="editCardActivity")
     add_card = GenericRelation(Activity, related_name="addCardActivity")
     archive_card = GenericRelation(Activity, related_name="archiveCardActivty")
@@ -158,29 +163,22 @@ class ListCard(models.Model):
         return self.title
 
 
-    
-
-
-class BoardMembers(models.Model):
-    member = models.ForeignKey(TrelloUser, on_delete=models.CASCADE, null=True)
-    board = models.ForeignKey(Board, on_delete=models.CASCADE, null=True)
-    
-    def __str__(self):
-        return str(self.member)
-
 class BoardInvite(models.Model):
     uuid = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     board = models.ForeignKey(Board, on_delete=models.CASCADE, null=True)
     email = models.EmailField(max_length=255,unique=True)
 
+
 class CardAttatchments(models.Model):
     card = models.ForeignKey(ListCard,on_delete=models.CASCADE)
     file = models.FileField(upload_to='files/', null =True)
+
 
 class CardCheckList(models.Model):
     card = models.ForeignKey(ListCard,on_delete=models.CASCADE)
     checklist = models.CharField(max_length=100, null =True)
     is_checked = models.BooleanField(default=False)
+
 
 class CommentSection(models.Model):
     card = models.ForeignKey(ListCard,on_delete=models.CASCADE)

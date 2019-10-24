@@ -3,7 +3,7 @@ from django import forms
 from .models import Board,BoardList, ListCard,BoardInvite,CardAttatchments,CardCheckList,CommentSection
 from .models import TrelloUser
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
-
+from celery import shared_task
 
 class BoardForm(ModelForm):
     class Meta:
@@ -23,10 +23,17 @@ class CardForm(ModelForm):
         model = ListCard
         fields = ['title','description']
 
+class CardMemberForm(ModelForm):
+    description = CharField(required=False)
+    class Meta:
+        model = ListCard
+        fields = ['card_member']
+
 class BoardInviteForm(ModelForm):
     class Meta:
         model = BoardInvite
         fields = ['email']
+    
 
 class CardAttatchmentForm(ModelForm):
     class Meta:

@@ -36,7 +36,9 @@ from .views import (ViewBoards,
                     HomeRedirect,
                     Search,
                     ChecklistCheck,
-                    AddComment,)
+                    AddComment,
+                    AddCardMember,
+                    RemoveCardMember,)
 
 urlpatterns = [
     path('', ViewBoards.as_view(), name="viewBoards"),
@@ -64,7 +66,8 @@ urlpatterns = [
     path('board/<int:board_id>/<uuid:invitation_id>/invite/', LinkInviteMember.as_view(), name="linkInviteMembers"),
     path('board/home/', HomeRedirect.as_view(), name="homeRedirect"),
     path('board/search/', Search.as_view(), name="search"),
-    
+    path('board/<int:board_id>/<int:list_id>/<int:card_id>/<int:member_id>/', AddCardMember.as_view(), name="addCardMember"),
+    path('board/<int:board_id>/<int:list_id>/<int:card_id>/<int:member_id>/remove', RemoveCardMember.as_view(), name="removeCardMember"),
 
 
     path('accounts/signup/', SignUp.as_view(), name='signUp'),

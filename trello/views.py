@@ -19,6 +19,8 @@ from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.http import HttpResponse
+from celery import shared_task
+from .tasks import invite_member
 
 # Create your views here.
 class CustomPermissionMixin(object):
@@ -256,11 +258,12 @@ class ViewCard(TemplateView):
         card = get_object_or_404(ListCard,id=kwargs.get("card_id"))
         board_list = get_object_or_404(BoardList,id=kwargs.get("list_id"))
         board = get_object_or_404(Board,id=kwargs.get("board_id"))
+        board_members = BoardMembers.objects.filter(board=board)
         attatchments = CardAttatchments.objects.filter(card=card)
         checklists = CardCheckList.objects.filter(card=card)
         comments = CommentSection.objects.filter(card=card)
         
-        return render(request, self.template_name,{'form':form,'formCl':formCl,'formComm':formComm,'checklists':checklists,'attatchments':attatchments,'comments':comments,'board':board,'list':board_list,'card':card})
+        return render(request, self.template_name,{'form':form,'formCl':formCl,'formComm':formComm,'board_members':board_members,'checklists':checklists,'attatchments':attatchments,'comments':comments,'board':board,'list':board_list,'card':card})
     
 
 class AddCard(TemplateView):
@@ -377,7 +380,7 @@ class InviteMember(TemplateView):
         user = request.user
         if (form.is_valid):
             invite_member_form = form.save(commit=False)
-            subject = 'You have been invited to my site'
+            subject = 'You have been invited to my site YEAH'
             message = ' '
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [invite_member_form.email,]
@@ -390,7 +393,8 @@ class InviteMember(TemplateView):
                 'domain': request.META['HTTP_HOST'],
                 }
             )
-            send_mail( subject, message, email_from, recipient_list, html_message=html_message)
+            task = invite_member.delay(subject, message, email_from, recipient_list, html_message)            
+            #send_mail( subject, message, email_from, recipient_list, html_message=html_message)
             return JsonResponse({})
         
 
@@ -478,7 +482,27 @@ class Search(View):
         boardResults = Board.objects.filter(title__contains=request.GET.get('myinput'))
         return render(request,self.template_name,{'cardResults':cardResults,'listResults':listResults,'boardResults':boardResults})
 
+class AddCardMember(View):
+    def get(self,request,**kwargs):
+        board = get_object_or_404(Board,id=kwargs.get("board_id"))
+        card = get_object_or_404(ListCard,id=kwargs.get("card_id"))
+        board_member = get_object_or_404(BoardMembers,id=kwargs.get("member_id"))
+        card.card_member.add(board_member)
+        card.save()
+        
+        return redirect('boardContent', board_id=board.id)
 
+
+class RemoveCardMember(View):
+    def get(self,request,**kwargs):
+        board = get_object_or_404(Board,id=kwargs.get("board_id"))
+        card = get_object_or_404(ListCard,id=kwargs.get("card_id"))
+        board_member = get_object_or_404(BoardMembers,id=kwargs.get("member_id"))
+        card.card_member.remove(board_member)
+        card.save()
+        
+        return redirect('boardContent', board_id=board.id)
+        
 
 
 

@@ -1,11 +1,25 @@
 
+        
         <div class="container">
+                <button class="btn btn-secondary dropdown-toggle float-right mr-4 " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Add Member
+                        </button>
+                        <div class="dropdown-menu overflow-auto" style="max-height: 300px;" aria-labelledby="dropdownMenuButton">
+                            {% for member in board_members %}                
+                                <li class="list-group-item" ><a href="{% url 'addCardMember' board_id=board.id list_id=list.id card_id=card.id member_id=member.id %}">{{ member }}</a></li>
+                            {% endfor %}
+                        </div>
             <div class="row justify-content">
                            
             <div class="col-sm5">
                 <h2>Description:</h2>
-                <p>{{ card.description }}</p><br>
-
+                <p>{{ card.description }}</p>
+                Members:
+                {% for mem in card.card_member.all %}
+                   [{{mem}} <a class="fa fa-minus" href="{% url 'removeCardMember' board_id=board.id list_id=list.id card_id=card.id member_id=mem.id %}"></a> ]
+                {% endfor %}
+                <br>
+                
             
 
                 <div class="progress">

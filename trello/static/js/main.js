@@ -380,6 +380,7 @@ $(document).on('submit','#add_cl_form', function(event){
          })
       }
    })
+   
 
 
    $(document).on('click','.cl', function(event,ui) {
@@ -403,8 +404,12 @@ $(document).on('submit','#add_cl_form', function(event){
       })     
   });
 
-  
 
+
+
+
+  
+  
 
 
 
