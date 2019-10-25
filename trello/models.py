@@ -119,7 +119,7 @@ class Activity(models.Model):
     )
 
     user = models.ForeignKey(TrelloUser, on_delete=models.CASCADE)
-    activity_type = models.CharField(max_length=1, choices=ACTIVITY_TYPES)
+    activity_type = models.CharField(max_length=50, choices=ACTIVITY_TYPES)
     date = models.DateTimeField(auto_now_add=True)
     
     board = models.ForeignKey(Board,on_delete=models.CASCADE,null=True)

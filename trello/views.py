@@ -431,7 +431,7 @@ class AddCheckList(TemplateView):
         board = get_object_or_404(Board,id=kwargs.get("board_id"))
         card = get_object_or_404(ListCard,id=kwargs.get("card_id"))
         formCl = self.formCl(request.POST)
-        if formCl.is_valid():
+        if formCl.is_valid():            
             cl_data = formCl.save(commit=False)
             cl_data.card = card
             cl_data.save()

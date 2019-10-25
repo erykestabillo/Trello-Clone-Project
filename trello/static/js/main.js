@@ -360,14 +360,11 @@ $(document).on('submit','#add_cl_form', function(event){
 
 
    $(".sort").sortable({
-      connectWith: ".sort",
-      
+      connectWith: ".sort",      
       receive: function(event,ui){
          var card_list_id = $(this).data('id');
          var csrf = $('[name="csrfmiddlewaretoken"]').val();    
          var action = $(event.toElement).data('action');
-         console.log(action)
-
          $.ajax({
             method: 'POST',
             url: action,
