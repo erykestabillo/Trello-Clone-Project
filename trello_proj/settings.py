@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crispy_forms',
+    'djcelery_email',
+    
     
 ]
 
@@ -129,7 +131,7 @@ LOGOUT_REDIRECT_URL = '/'
 
 AUTH_USER_MODEL = 'trello.TrelloUser'
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 
 EMAIL_HOST = 'smtp.gmail.com'
@@ -144,8 +146,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # celery
+
 BROKER_URL = 'redis://localhost:6379'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Hongkong'

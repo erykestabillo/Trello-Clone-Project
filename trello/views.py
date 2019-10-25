@@ -352,18 +352,22 @@ class SignUp(TemplateView):
         return render(request,self.template_name,{'form':form})
 
 
-class PasswordReset(TemplateView):
-    template_name = 'registration/signup.html'
-    def get(self,request,**kwargs):
-        form = self.form()
-        return render(request, self.template_name, {'form':form})
-    def post(self,request,**kwargs):
-        form = self.form(request.POST)
-        if form.is_valid():
-            form.clean_password2()
-            form.save()
-            return redirect('/accounts/login/')
-        return render(request,self.template_name,{'form':form})
+# class PasswordReset(TemplateView):
+#     template_name = 'registration/signup.html'
+#     import pdb; pdb.set_trace()
+#     def get(self,request,**kwargs):
+#         form = self.form()        
+        
+#         return render(request, self.template_name, {'form':form})
+        
+#     def post(self,request,**kwargs):
+#         form = self.form(request.POST)
+#         if form.is_valid():
+#             form.clean_password2()
+#             form.save()
+#             import pdb; pdb.set_trace()
+#             return redirect('/accounts/login/')
+#         return render(request,self.template_name,{'form':form})
 
 
 class InviteMember(TemplateView):
@@ -380,7 +384,7 @@ class InviteMember(TemplateView):
         user = request.user
         if (form.is_valid):
             invite_member_form = form.save(commit=False)
-            subject = 'You have been invited to my site YEAH'
+            subject = 'CELERY IS LIT AF'
             message = ' '
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [invite_member_form.email,]

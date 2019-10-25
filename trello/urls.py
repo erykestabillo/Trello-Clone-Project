@@ -1,44 +1,19 @@
+from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from django.urls import path,include
-from django.conf.urls import url
 from django.contrib.auth.views import PasswordResetView
-from .views import (ViewBoards,
-                    AddBoard, 
-                    BoardContent,
-                    AddList,EditBoard,
-                    AddCard,
-                    EditCard,
-                    EditList,
-                    DeleteCard,
-                    DeleteList,
-                    DeleteBoard,
-                    BoardArchive,
-                    BoardRestore,
-                    SignUp,
-                    AddBoardAjax,
-                    EditBoardAjax,
-                    AddListAjax,
-                    EditListAjax,
-                    AddCardAjax,
-                    EditCardAjax,
-                    ArchiveCard,
-                    CardArchives,
-                    RestoreCard,
-                    ChangeCard,
-                    InviteMember,
-                    LinkInviteMember,
-                    ViewCard,
-                    Attatchments,
-                    DeleteAttatchment,
-                    AddCheckList,
-                    DeleteCheckList,
-                    HomeRedirect,
-                    Search,
-                    ChecklistCheck,
-                    AddComment,
-                    AddCardMember,
-                    RemoveCardMember,)
+from django.urls import include, path
+
+from .views import (AddBoard, AddBoardAjax, AddCard, AddCardAjax,
+                    AddCardMember, AddCheckList, AddComment, AddList,
+                    AddListAjax, ArchiveCard, Attatchments, BoardArchive,
+                    BoardContent, BoardRestore, CardArchives, ChangeCard,
+                    ChecklistCheck, DeleteAttatchment, DeleteBoard, DeleteCard,
+                    DeleteCheckList, DeleteList, EditBoard, EditBoardAjax,
+                    EditCard, EditCardAjax, EditList, EditListAjax,
+                    HomeRedirect, InviteMember, LinkInviteMember,
+                    RemoveCardMember, RestoreCard, Search, SignUp, ViewBoards,
+                    ViewCard)
 
 urlpatterns = [
     path('', ViewBoards.as_view(), name="viewBoards"),
