@@ -141,7 +141,6 @@ AUTH_USER_MODEL = 'trello.TrelloUser'
 
 EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
-
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'hellotrelloclone@gmail.com'
@@ -154,7 +153,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # celery
-
 BROKER_URL = 'redis://localhost:6379'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']

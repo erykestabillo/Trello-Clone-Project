@@ -21,6 +21,7 @@ from django.dispatch import receiver
 from django.http import HttpResponse
 from celery import shared_task
 from .tasks import invite_member
+import re
 
 # Create your views here.
 class CustomPermissionMixin(object):
@@ -40,7 +41,7 @@ class BoardContent(LoginRequiredMixin,CustomPermissionMixin,TemplateView):
         board = get_object_or_404(Board,id=board_id)
         if(board.is_archived==False):
             board_lists = BoardList.objects.filter(board_id=board_id)        
-            list_cards = ListCard.objects.filter(is_archived=False)
+            list_cards = ListCard.objects.filter(is_archived=False).order_by('order')
             board_members = BoardMembers.objects.filter(board=board)
             member_boards = BoardMembers.objects.all()
             activities = Activity.objects.filter(user__in=member_boards.values('member'),board=board).order_by('-date')            
@@ -81,7 +82,7 @@ class AddBoardAjax(TemplateView):
             else:
                 template_name ="trello/already_a_member.html"
                 return render(request,template_name,{'board_member':board_member})
-            return JsonResponse({})
+            return JsonResponse({'board_form':board_form.title})
         return JsonResponse({}, status=400)
 
 
@@ -137,11 +138,11 @@ class AddListAjax(TemplateView):
         board = get_object_or_404(Board,id=kwargs.get("board_id"))
         form = self.form(request.POST)
         if form.is_valid():
-            board_form = form.save(commit=False)
-            board_form.board = board
-            board_form.save()
-            Activity.objects.create(content_object=board_form,board=board, activity_type=Activity.ADD_LIST, user=request.user)
-            return JsonResponse({'board_form':board_form.title})
+            list_data = form.save(commit=False)
+            list_data.board = board
+            list_data.save()
+            Activity.objects.create(content_object=list_data,board=board, activity_type=Activity.ADD_LIST, user=request.user)
+            return JsonResponse({'list_data':list_data.title})
         return JsonResponse({}, status=400)
 
 
@@ -172,11 +173,11 @@ class EditListAjax(TemplateView):
         board = get_object_or_404(Board,id=kwargs.get("board_id"))
         form = self.form(request.POST,instance=board_list)
         if form.is_valid():
-            board_form = form.save(commit=False)
-            board_form.board = board
-            board_form.save()
+            list_data = form.save(commit=False)
+            list_data.board = board
+            list_data.save()
             Activity.objects.create(content_object=board_list,board=board, activity_type=Activity.EDIT_LIST, user=request.user)
-            return JsonResponse({})
+            return JsonResponse({'list_data':list_data.title})
         return JsonResponse({}, status=400)
 
 
@@ -199,10 +200,10 @@ class EditCardAjax(TemplateView):
         board = get_object_or_404(Board,id=kwargs.get("board_id"))
         form = self.form(request.POST,instance=card_object)
         if form.is_valid():
-            board_form = form.save(commit=False)
-            board_form.user = request.user
-            Activity.objects.create(content_object=card_object,board=board, activity_type=Activity.EDIT_CARD, user=request.user)
-            board_form.save()
+            card_data = form.save(commit=False)
+            card_data.user = request.user
+            Activity.objects.create(content_object=card_data,board=board, activity_type=Activity.EDIT_CARD, user=request.user)
+            card_data.save()
             return JsonResponse({'board_id':kwargs.get("board_id"),'list_id':kwargs.get("list_id"),'card_id':kwargs.get("card_id")})
         return JsonResponse({}, status=400)
 
@@ -210,12 +211,21 @@ class EditCardAjax(TemplateView):
 class ChangeCard(TemplateView):
     
     def post(self,request,**kwargs):
-        board = get_object_or_404(Board,id=kwargs.get("board_id"))
-        card = get_object_or_404(ListCard,id=kwargs.get("card_id"))
+        
+        board = get_object_or_404(Board,id=kwargs.get("board_id"))       
         board_list = get_object_or_404(BoardList,id=request.POST.get('id'))
+        card = get_object_or_404(ListCard,id=kwargs.get("card_id"))
         card.board_list = board_list
         card.save()
         Activity.objects.create(content_object=card,board=board, activity_type=Activity.MOVED_CARD, user=request.user)
+
+        for index,id in enumerate(request.POST.getlist('data')):            
+            if (id):                
+                card_id = int(re.findall("\d+",id)[0])
+                card_order = get_object_or_404(ListCard,id=card_id)                
+                card_order.order = index
+                card_order.save()
+
         return JsonResponse({'list':card.board_list.id}, status=200)
 
 
@@ -261,7 +271,7 @@ class ViewCard(TemplateView):
         board_members = BoardMembers.objects.filter(board=board)
         attatchments = CardAttatchments.objects.filter(card=card)
         checklists = CardCheckList.objects.filter(card=card)
-        comments = CommentSection.objects.filter(card=card)
+        comments = CommentSection.objects.filter(card=card).order_by('date_created')
         
         return render(request, self.template_name,{'form':form,'formCl':formCl,'formComm':formComm,'board_members':board_members,'checklists':checklists,'attatchments':attatchments,'comments':comments,'board':board,'list':board_list,'card':card})
     
@@ -284,11 +294,11 @@ class AddCardAjax(TemplateView):
         board = get_object_or_404(Board,id=kwargs.get("board_id"))
         form = self.form(request.POST)
         if form.is_valid():
-            board_form = form.save(commit=False)
-            board_form.board_list = board_list         
-            board_form.save()
-            Activity.objects.create(content_object=board_form,board=board, activity_type=Activity.ADD_CARD, user=request.user)
-            return JsonResponse({})
+            card_data = form.save(commit=False)
+            card_data.board_list = board_list         
+            card_data.save()
+            Activity.objects.create(content_object=card_data,board=board, activity_type=Activity.ADD_CARD, user=request.user)
+            return JsonResponse({'card_data':card_data.title})
         return JsonResponse({}, status=400)
 
 
@@ -352,24 +362,6 @@ class SignUp(TemplateView):
         return render(request,self.template_name,{'form':form})
 
 
-# class PasswordReset(TemplateView):
-#     template_name = 'registration/signup.html'
-#     import pdb; pdb.set_trace()
-#     def get(self,request,**kwargs):
-#         form = self.form()        
-        
-#         return render(request, self.template_name, {'form':form})
-        
-#     def post(self,request,**kwargs):
-#         form = self.form(request.POST)
-#         if form.is_valid():
-#             form.clean_password2()
-#             form.save()
-#             import pdb; pdb.set_trace()
-#             return redirect('/accounts/login/')
-#         return render(request,self.template_name,{'form':form})
-
-
 class InviteMember(TemplateView):
     template_name = "trello/invite_member.html"
     login_url = '/accounts/login/'
@@ -399,7 +391,7 @@ class InviteMember(TemplateView):
             )
             task = invite_member.delay(subject, message, email_from, recipient_list, html_message)            
             #send_mail( subject, message, email_from, recipient_list, html_message=html_message)
-            return JsonResponse({})
+            return JsonResponse({})        
         
 
 class LinkInviteMember(LoginRequiredMixin ,TemplateView):
@@ -436,7 +428,7 @@ class AddCheckList(TemplateView):
             cl_data.card = card
             cl_data.save()
             Activity.objects.create(content_object=card,board=board, activity_type=Activity.CL_ADD, user=request.user)
-            return JsonResponse({})
+            return JsonResponse({'cl_data':cl_data.checklist})
         return JsonResponse({}, status=400)
 
 
@@ -453,7 +445,7 @@ class AddComment(TemplateView):
             comment_data.author = request.user
             comment_data.save()
             Activity.objects.create(content_object=card,board=board, activity_type=Activity.COMMENT_ADD, user=request.user)
-            return JsonResponse({})
+            return JsonResponse({'comment_data':comment_data.text})
         return JsonResponse({}, status=400) 
 
 

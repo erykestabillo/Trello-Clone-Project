@@ -273,7 +273,7 @@ $(document).ready(function () {
          
       }).fail(function(response){
          var error_template = '<ul><li>This Field is required</li></ul>';
-         $('.error-edit-card').html(error_template)
+         $('.error-invite-member').html(error_template)
       })
    })
 
@@ -361,22 +361,28 @@ $(document).on('submit','#add_cl_form', function(event){
 
    $(".sort").sortable({
       connectWith: ".sort",      
-      receive: function(event,ui){
+      over: function(event,ui){
          var card_list_id = $(this).data('id');
          var csrf = $('[name="csrfmiddlewaretoken"]').val();    
-         var action = $(event.toElement).data('action');
+         var action = $(event.toElement).data('action');   
+         var arrayOrder = $(this).sortable("serialize");
+         
+         console.log(arrayOrder)
+         
          $.ajax({
             method: 'POST',
             url: action,
-            data: {'id':card_list_id},
+            data: {'id':card_list_id,'data':arrayOrder},
             headers:{
                'X-CSRFToken':csrf
            }
          }).done(function(response){
-            console.log(response,"done")
+            console.log(response)
          })
       }
    })
+
+
    
 
 

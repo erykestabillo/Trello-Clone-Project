@@ -158,7 +158,11 @@ class ListCard(models.Model):
     add_card = GenericRelation(Activity, related_name="addCardActivity")
     archive_card = GenericRelation(Activity, related_name="archiveCardActivty")
     moved_card = GenericRelation(Activity, related_name="moveCardActivity")
+    order = models.IntegerField(default=0)
 
+    class Meta:
+        ordering = ['order']
+        
     def __str__(self):
         return self.title
 
@@ -185,4 +189,6 @@ class CommentSection(models.Model):
     author =  models.ForeignKey(TrelloUser, on_delete=models.CASCADE)
     text = models.CharField(max_length=200)
     date_created = models.DateTimeField(default=timezone.now)
+
+
 

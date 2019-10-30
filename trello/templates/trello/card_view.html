@@ -5,9 +5,11 @@
                         Add Member
                         </button>
                         <div class="dropdown-menu overflow-auto" style="max-height: 300px;" aria-labelledby="dropdownMenuButton">
-                            {% for member in board_members %}                
+                            
+                            {% for member in board_members %}              
                                 <li class="list-group-item" ><a href="{% url 'addCardMember' board_id=board.id list_id=list.id card_id=card.id member_id=member.id %}">{{ member }}</a></li>
                             {% endfor %}
+                            
                         </div>
             <div class="row justify-content">
                            
@@ -17,6 +19,8 @@
                 Members:
                 {% for mem in card.card_member.all %}
                    [{{mem}} <a class="fa fa-minus" href="{% url 'removeCardMember' board_id=board.id list_id=list.id card_id=card.id member_id=mem.id %}"></a> ]
+                   {% empty %}
+                        No members
                 {% endfor %}
                 <br>
                 
@@ -29,6 +33,7 @@
                 <h2 style="display:inline-block">Checklist</h2>
                 <form id="add_cl_form" action="{% url 'addChecklist' board_id=board.id list_id=list.id card_id=card.id %}" method="POST" novalidate enctype="multipart/form-data" novalidate> {% csrf_token %}
                     {{ formCl }}<button type="submit" style="background-color: green" class="btn btn-success btn-sm ">Add</button>
+                    
                 <br><p class="error-add-cl"></p>
 
                     <ul id="checklist" class="list-group cl"  >
@@ -84,7 +89,7 @@
                 {% for comment in comments %}
                     <div class="comment">
                         
-                        <li class="list-group-item list-group-item-dark"><strong>{{ comment.author }}  </strong>{{ comment.date_created }}</li>
+                        <li class="list-group-item " style="background-color: rgb(170, 145, 199)"><strong>{{ comment.author }}  </strong>{{ comment.date_created }}</li>
                         <li class="list-group-item">{{ comment.text|linebreaks }}</li>
                     </div>
                 {% empty %}

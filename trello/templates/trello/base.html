@@ -58,6 +58,7 @@
                 </li>
                 
                 <li class="nav-item">
+                  {% if board.user == request.user %}
                   <!-- Button trigger modal -->
                   <button type="button" 
                   class="btn btn-primary border-0 bg bg-transparent p-2"
@@ -67,7 +68,7 @@
                   data-target="#invite-member-modal">
                   Invite Member
                   </button>
-
+                  {% endif %}
                   <!-- Modal -->
                   <div class="modal fade" id="invite-member-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered" role="document">
